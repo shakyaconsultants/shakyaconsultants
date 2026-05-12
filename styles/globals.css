@@ -4,19 +4,19 @@
 
 @layer base {
   :root {
-    --background: 249 250 251; /* Off-white #F9FAFB */
+    --background: 247 250 255; /* Cool off-white */
     --foreground: 15 23 42; /* Slate 900 */
     
-    --bg-base: #F9FAFB; /* Clean light SaaS background */
+    --bg-base: #F7FAFF; /* Clean light SaaS background */
     
-    /* SaaS Primary: Professional Indigo */
-    --accent-primary: #4F46E5;
-    --accent-primary-hover: #4338CA;
-    --accent-primary-rgb: 79, 70, 229;
+    /* SaaS Primary: Professional Blue */
+    --accent-primary: #2563EB;
+    --accent-primary-hover: #1D4ED8;
+    --accent-primary-rgb: 37, 99, 235;
     
-    /* SaaS Secondary: Soft Purple */
-    --accent-secondary: #7C3AED;
-    --accent-secondary-rgb: 124, 58, 237;
+    /* Secondary: Calm Sky Blue */
+    --accent-secondary: #0EA5E9;
+    --accent-secondary-rgb: 14, 165, 233;
   }
 }
 
@@ -26,7 +26,7 @@
     color: var(--foreground);
     font-feature-settings: "rlig" 1, "calt" 1;
     /* Soft, minimal radial gradient at top */
-    background-image: radial-gradient(circle at 50% -20%, rgba(79, 70, 229, 0.05), rgba(249, 250, 251, 1) 60%);
+    background-image: radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.05), rgba(247, 250, 255, 1) 62%);
     background-attachment: fixed;
     background-repeat: no-repeat;
     -webkit-font-smoothing: antialiased;

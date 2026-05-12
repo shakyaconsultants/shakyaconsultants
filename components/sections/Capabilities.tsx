@@ -3,8 +3,12 @@
 import Section from "@/components/ui/Section";
 import { capabilities } from "@/data/capabilities";
 import {
+  Bot,
   Code2,
-  Smartphone,
+  Database,
+  Link2,
+  PenTool,
+  Presentation,
   BarChart3,
   Users,
   Zap,
@@ -14,8 +18,12 @@ import {
 } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
+  Bot,
   Code2,
-  Smartphone,
+  Database,
+  Link2,
+  PenTool,
+  Presentation,
   BarChart3,
   Users,
   Zap,
@@ -27,12 +35,12 @@ export default function Capabilities({ className = "" }: { className?: string })
   return (
     <Section 
       id="capabilities" 
-      className={`relative py-16 md:py-24 overflow-hidden border-y border-white/[0.05] bg-navy text-white ${className}`}
+      className={`relative py-16 md:py-24 overflow-hidden border-y border-black/[0.04] bg-[#F7FAFF] text-text-primary ${className}`}
       style={{
         background: `
-          radial-gradient(circle at 10% 20%, rgba(99,102,241,0.12), transparent 40%),
-          radial-gradient(circle at 90% 80%, rgba(139,92,246,0.12), transparent 40%),
-          #0B0F1A
+          radial-gradient(circle at 10% 20%, rgba(79,70,229,0.07), transparent 38%),
+          radial-gradient(circle at 90% 80%, rgba(56,189,248,0.08), transparent 38%),
+          #F7FAFF
         `
       }}
     >
@@ -40,19 +48,19 @@ export default function Capabilities({ className = "" }: { className?: string })
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay hero-grain"></div>
       
       {/* Visual Depth Glows */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-primary/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+        <div className="absolute top-1/4 left-1/4 w-[420px] h-[420px] bg-accent-primary/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[420px] h-[420px] bg-sky-500/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section Header Upgrade */}
         <div className="max-w-4xl mx-auto text-center mb-16 md:mb-20 space-y-6">
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/5 border border-white/10 shadow-sm mb-4">
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white">
+          <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-border-default shadow-sm mb-4">
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-accent-primary">
               Our Capabilities
             </span>
           </div>
 
-          <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-[1.05]">
+          <h2 className="text-4xl md:text-6xl font-black text-text-primary tracking-tighter leading-[1.05]">
             Everything you need to <br className="hidden md:block" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent-primary via-indigo-400 to-purple-400">
                build, scale, and dominate
@@ -60,7 +68,7 @@ export default function Capabilities({ className = "" }: { className?: string })
             your market
           </h2>
           
-          <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-[600px] mx-auto font-medium">
+          <p className="text-lg md:text-xl text-text-secondary leading-relaxed max-w-[600px] mx-auto font-medium">
             We combine engineering, automation, and growth systems to help businesses 
             move faster, operate smarter, and scale efficiently.
           </p>
@@ -76,9 +84,9 @@ export default function Capabilities({ className = "" }: { className?: string })
                 key={service.id}
                 className="
                   group relative reveal flex flex-col items-start gap-8 p-8 md:p-10 rounded-[2.5rem]
-                  bg-white/[0.03] backdrop-blur-[14px] border border-white/10 focus-within:border-accent-primary/50 
-                  shadow-2xl transition-all duration-500 ease-out h-full
-                  hover:-translate-y-3 hover:bg-white/[0.06] hover:border-white/20
+                  bg-white/90 backdrop-blur-[8px] border border-black/[0.06] focus-within:border-accent-primary/40
+                  shadow-[0_20px_50px_-25px_rgba(30,64,175,0.2)] transition-all duration-500 ease-out h-full
+                  hover:-translate-y-2 hover:border-accent-primary/25 hover:shadow-[0_24px_60px_-28px_rgba(30,64,175,0.3)]
                 "
               >
                 {/* Icon Design Upgrade */}
@@ -95,10 +103,10 @@ export default function Capabilities({ className = "" }: { className?: string })
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-black leading-tight tracking-tight text-white group-hover:text-accent-primary transition-colors">
+                    <h3 className="text-2xl font-black leading-tight tracking-tight text-text-primary group-hover:text-accent-primary transition-colors">
                     {service.title}
                   </h3>
-                  <p className="text-base md:text-lg leading-relaxed text-slate-400">
+                  <p className="text-base md:text-lg leading-relaxed text-text-secondary">
                     {service.description}
                   </p>
                 </div>

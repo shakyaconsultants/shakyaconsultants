@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card';
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const [authChecking, setAuthChecking] = useState(true);
   const [activeTab, setActiveTab] = useState<'projects' | 'clients' | 'testimonials'>('projects');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -46,20 +47,51 @@ export default function AdminDashboard() {
 
   // Check Auth on Mount
   useEffect(() => {
-    const token = getAuthToken();
-    if (!token) {
-      router.push('/admin/login');
-    } else {
-      fetchProjects();
-      fetchClients();
-      fetchTestimonials();
-    }
+    const initAdminSession = async () => {
+      const token = getAuthToken();
+      if (!token) {
+        router.replace('/admin/login');
+        return;
+      }
+
+      try {
+        const sessionRes = await fetch('/api/auth/validate', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!sessionRes.ok) {
+          localStorage.removeItem('adminToken');
+          router.replace('/admin/login');
+          return;
+        }
+
+        await Promise.all([
+          fetchProjects(),
+          fetchClients(),
+          fetchTestimonials(),
+        ]);
+      } finally {
+        setAuthChecking(false);
+      }
+    };
+
+    initAdminSession();
   }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
-    router.push('/admin/login');
+    router.replace('/admin/login');
   };
+
+  if (authChecking) {
+    return (
+      <div className="min-h-screen bg-bg-base p-8 flex items-center justify-center">
+        <p className="text-text-secondary text-sm font-medium">Validating admin session...</p>
+      </div>
+    );
+  }
 
   const fetchProjects = async () => {
     try {

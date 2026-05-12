@@ -11,14 +11,38 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Check if already logged in
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    if (token) {
-      router.push("/admin");
-    }
+    const checkSession = async () => {
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        setCheckingSession(false);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/auth/validate", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          router.replace("/admin");
+          return;
+        }
+      } catch (sessionError) {
+        console.error("Session validation failed:", sessionError);
+      }
+
+      localStorage.removeItem("adminToken");
+      setCheckingSession(false);
+    };
+
+    checkSession();
   }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -39,7 +63,7 @@ export default function LoginPage() {
 
       if (data.success) {
         localStorage.setItem("adminToken", data.token);
-        router.push("/admin");
+        router.replace("/admin");
       } else {
         setError(data.error || "Login failed. Please check your credentials.");
       }
@@ -49,6 +73,14 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  if (checkingSession) {
+    return (
+      <div className="min-h-screen bg-bg-base flex items-center justify-center p-6">
+        <p className="text-text-secondary text-sm font-medium">Checking session...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-base flex items-center justify-center p-6">

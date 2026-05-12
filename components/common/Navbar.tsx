@@ -19,7 +19,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: "Work", href: "/#work" },
   { label: "Capabilities", href: "/#capabilities" },
-  { label: "Pricing", href: "/#pricing" },
+  { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/#about" },
   { label: "Resources", href: "/#faq" },
   { label: "Contact Us", href: "/#contact" },
@@ -135,7 +135,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 h-[64px] bg-white/70 backdrop-blur-[12px] border-b border-black/[0.05] shadow-[0_4px_20px_rgba(0,0,0,0.03)]"
+        className="fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 h-[64px] bg-white/85 backdrop-blur-[10px] border-b border-black/[0.05] shadow-[0_3px_14px_rgba(30,64,175,0.08)]"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-full">
           <div className="flex items-center justify-between h-full">
@@ -168,7 +168,7 @@ export default function Navbar() {
                     href={item.href}
                     onClick={(e) => handleSmoothScroll(e, item.href)}
                     className={`font-bold transition-all duration-300 focus:outline-none rounded-md px-2 py-1 relative group text-[11px] uppercase tracking-[0.2em] nav-link-lift hover:-translate-y-0.5 ${
-                      isActive ? "text-accent-primary" : "text-slate-500 hover:text-accent-primary"
+                      isActive ? "text-accent-primary" : "text-slate-600 hover:text-accent-primary"
                     }`}
                   >
                     {item.label}

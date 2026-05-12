@@ -70,64 +70,63 @@ export default function Testimonials({ className = "" }: { className?: string })
 
   const TestimonialCard = ({ t, index }: { t: any; index: number }) => {
     const isActive = activeIndex === index;
+    const techTags = t.technologies && Array.isArray(t.technologies) && t.technologies.length > 0
+      ? t.technologies
+      : [""];
 
     return (
       <div 
         id={`testimonial-card-${index}`}
         className={`
-          flex-shrink-0 w-full transition-all duration-1000 ease-in-out px-4 py-12 snap-center flex justify-center
+          flex-shrink-0 w-full transition-all duration-1000 ease-in-out px-4 py-8 md:py-12 snap-center flex justify-center
           ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 absolute inset-0 pointer-events-none"}
         `}
       >
-        <div className="relative max-w-4xl mx-auto flex flex-col items-center text-center">
-          {/* Editorial Background Quote Mark */}
-          <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 text-slate-100/30 select-none pointer-events-none -z-10 transition-transform duration-1000 group-hover:scale-110">
-             <Quote size={192} strokeWidth={0.5} className="opacity-10" />
-          </div>
+        <div className="relative w-full max-w-5xl mx-auto">
+          <div className="rounded-[2rem] md:rounded-[2.5rem] border border-black/[0.06] bg-white/90 shadow-[0_30px_80px_-40px_rgba(37,99,235,0.25)] p-8 md:p-10 lg:p-12">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 lg:gap-10 items-start">
+              <div className="text-left">
+                <blockquote className="text-xl md:text-3xl font-semibold leading-[1.35] text-slate-900 tracking-tight">
+                  &ldquo;{t.message}&rdquo;
+                </blockquote>
 
-          {/* 1. HERO QUOTE (Compact Architectural Width) */}
-          <div className="flex-grow max-w-[600px] mb-6 relative group cursor-default">
-            <blockquote className="text-xl md:text-2xl lg:text-3xl font-semibold leading-[1.3] text-slate-800 tracking-tight transition-all duration-700">
-               &ldquo;{t.message}&rdquo;
-            </blockquote>
-          </div>
+                <div className="mt-7 flex flex-wrap gap-2.5">
+                  {techTags.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="px-3.5 py-1.5 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.16em] bg-slate-900 text-white"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
 
-          {/* 2. IDENTITY BLOCK (Signature Integration) */}
-          <div className="flex flex-col items-center group/author">
-            {/* Avatar with Signature Glow */}
-            <div className="relative mb-4">
-               <div className="absolute -inset-4 bg-accent-primary/[0.08] rounded-full blur-2xl group-hover/author:bg-accent-primary/[0.12] transition-all duration-700"></div>
-               <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-white ring-8 ring-slate-50/50 shadow-xl bg-white flex items-center justify-center transition-all duration-700 group-hover/author:scale-110 group-hover/author:ring-accent-primary/5">
-                {t.imageUrl ? (
-                  <img src={t.imageUrl} alt={t.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-accent-primary font-bold text-xl">{t.name?.charAt(0)}</span>
-                )}
+              <div className="flex flex-col items-start lg:items-end">
+                <div className="w-[220px] h-[220px] md:w-[260px] md:h-[260px] rounded-2xl overflow-hidden border border-black/10 shadow-sm bg-slate-100">
+                  {t.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={t.imageUrl}
+                      alt={t.name}
+                      className="w-full h-full object-cover grayscale"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-b from-slate-200 to-slate-300 flex items-center justify-center text-slate-600 text-5xl font-black">
+                      {t.name?.charAt(0)}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Author Meta (Brand Signature Line) */}
-            <div className="flex flex-col items-center">
-              <h4 className="font-bold text-slate-900 tracking-tight text-base md:text-lg mb-1 transition-colors group-hover/author:text-accent-primary">{t.name}</h4>
-              <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold flex items-center justify-center gap-2">
-                  <span>{t.role}</span>
-                  <span className="text-slate-200 text-lg leading-none">•</span>
-                  <span className="text-slate-900/70">{t.company || "Independent"}</span>
-              </p>
-            </div>
-          </div>
-
-          {/* 3. VIBRANT PROOF DETAIL */}
-          <div className="mt-6 flex justify-center relative z-10 transition-all duration-700">
-            <div className="flex gap-1.5">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} width="16" height="16" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-500 hover:scale-125">
-                  <path 
-                    d="M10.525.464a.5.5 0 0 1 .95 0l2.107 6.482a.5.5 0 0 0 .475.346h6.817a.5.5 0 0 1 .294.904l-5.515 4.007a.5.5 0 0 0-.181.559l2.106 6.483a.5.5 0 0 1-.77.559l-5.514-4.007a.5.5 0 0 0-.588 0l-5.514 4.007a.5.5 0 0 1-.77-.56l2.106-6.482a.5.5 0 0 0-.181-.56L.832 8.197a.5.5 0 0 1 .294-.904h6.817a.5.5 0 0 0 .475-.346z" 
-                    fill={i < (t.rating || 5) ? "#FACC15" : "#E2E8F0"}
-                  />
-                </svg>
-              ))}
+            <div className="mt-8 pt-6 border-t border-black/[0.08] flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h4 className="font-black text-slate-900 tracking-tight text-lg md:text-xl">{t.name}</h4>
+                <p className="text-[11px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold mt-1">
+                  {t.role || "Product Leader"}{t.company ? `, ${t.company}` : ""}
+                </p>
+              </div>
             </div>
           </div>
         </div>

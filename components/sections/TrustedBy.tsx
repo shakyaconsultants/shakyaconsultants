@@ -45,26 +45,15 @@ export default function TrustedBy({ className = "" }: { className?: string }) {
     return null;
   }
 
-  // Consistent Card UI - Fixed size and alignment
-  const LogoCard = ({ logo }: { logo: { src: string, alt: string } }) => (
-    <div className="
-      relative flex items-center justify-center 
-      w-40 md:w-52 h-20 md:h-24 
-      px-7 py-5 rounded-xl bg-white
-      border border-black/[0.03] shadow-md
-      flex-shrink-0
-      transition-all duration-300 ease-out
-      hover:scale-105 hover:shadow-lg hover:z-10
-    ">
-      <div className="relative w-full h-full flex items-center justify-center">
-        <Image
-          src={logo.src}
-          alt={logo.alt}
-          width={140}
-          height={56}
-          className="max-h-full max-w-full w-auto h-auto object-contain pointer-events-none select-none"
-        />
-      </div>
+  const LogoItem = ({ logo }: { logo: { src: string, alt: string } }) => (
+    <div className="relative flex items-center justify-center w-80 md:w-[28rem] h-30 md:h-36 flex-shrink-0">
+      <Image
+        src={logo.src}
+        alt={logo.alt}
+        width={340}
+        height={140}
+        className="max-h-full max-w-full w-auto h-auto object-contain pointer-events-none select-none opacity-100 brightness-110 contrast-125 saturate-125 drop-shadow-[0_6px_18px_rgba(37,99,235,0.18)] transition-all duration-300 hover:scale-[1.03] hover:drop-shadow-[0_10px_26px_rgba(37,99,235,0.28)]"
+      />
     </div>
   );
 
@@ -100,33 +89,21 @@ export default function TrustedBy({ className = "" }: { className?: string }) {
         </h2>
       </div>
 
-      <div className="relative space-y-8 z-10">
+      <div className="relative z-10">
         {/* Edge Fade Masks - Matched to Soft Neutral Gray */}
         <div className="absolute left-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-r from-[#F8FAFC] via-[#F8FAFC]/60 to-transparent z-10 pointer-events-none"></div>
         <div className="absolute right-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-l from-[#F8FAFC] via-[#F8FAFC]/60 to-transparent z-10 pointer-events-none"></div>
 
         {loading ? (
           <div className="flex justify-center gap-10 overflow-hidden px-4 animate-pulse">
-            {[1, 2, 3, 4, 5].map(n => <div key={n} className="w-52 h-24 bg-white rounded-xl shadow-sm border border-border-default" />)}
+            {[1, 2, 3, 4, 5].map(n => <div key={n} className="w-80 md:w-[28rem] h-30 md:h-36 bg-slate-100 rounded-md" />)}
           </div>
         ) : (
-          <div className="flex flex-col gap-8">
-            {/* Row 1 - Scroll Left */}
-            <div className="overflow-hidden w-full">
-              <div className="flex flex-nowrap w-max gap-6 animate-marquee pause-on-hover px-4">
-                {marqueeData.map((logo, index) => (
-                  <LogoCard key={`row1-${index}`} logo={logo} />
-                ))}
-              </div>
-            </div>
-
-            {/* Row 2 - Scroll Right */}
-            <div className="overflow-hidden w-full">
-              <div className="flex flex-nowrap w-max gap-6 animate-marquee-reverse pause-on-hover px-4">
-                {marqueeData.map((logo, index) => (
-                  <LogoCard key={`row2-${index}`} logo={logo} />
-                ))}
-              </div>
+          <div className="overflow-hidden w-full">
+            <div className="flex flex-nowrap w-max gap-10 md:gap-12 animate-marquee pause-on-hover px-4">
+              {marqueeData.map((logo, index) => (
+                <LogoItem key={`row-${index}`} logo={logo} />
+              ))}
             </div>
           </div>
         )}

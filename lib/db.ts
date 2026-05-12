@@ -1,9 +1,33 @@
 import mongoose from 'mongoose';
+import dns from 'node:dns';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env');
+}
+
+let dnsConfigured = false;
+
+function configureMongoDns() {
+  if (dnsConfigured || !MONGODB_URI.startsWith('mongodb+srv://')) {
+    return;
+  }
+
+  const envServers = (process.env.MONGODB_DNS_SERVERS || '')
+    .split(',')
+    .map((server) => server.trim())
+    .filter(Boolean);
+
+  const fallbackServers = ['1.1.1.1', '8.8.8.8'];
+  const dnsServers = envServers.length > 0 ? envServers : fallbackServers;
+
+  try {
+    dns.setServers(dnsServers);
+    dnsConfigured = true;
+  } catch (error) {
+    console.warn('Failed to set custom DNS servers for MongoDB SRV lookup:', error);
+  }
 }
 
 /**
@@ -33,6 +57,7 @@ async function dbConnect() {
       serverSelectionTimeoutMS: 10000, // 10 seconds timeout for better error reporting
     };
 
+    configureMongoDns();
     console.log('Connecting to MongoDB...');
     cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongooseInstance) => {
       console.log('MongoDB Connected successfully');
