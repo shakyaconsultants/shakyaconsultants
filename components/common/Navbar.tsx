@@ -135,7 +135,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 h-[64px] bg-white/85 backdrop-blur-[10px] border-b border-black/[0.05] shadow-[0_3px_14px_rgba(30,64,175,0.08)]"
+        className="fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 h-[72px] bg-white/85 backdrop-blur-[10px] border-b border-black/[0.05] shadow-[0_3px_14px_rgba(30,64,175,0.08)]"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-full">
           <div className="flex items-center justify-between h-full">
@@ -143,14 +143,14 @@ export default function Navbar() {
             <Link
               href="/#hero"
               onClick={(e) => handleSmoothScroll(e, "#hero")}
-              className="flex items-center gap-4 focus:outline-none rounded-md"
+              className="flex items-center gap-3 md:gap-4 focus:outline-none rounded-md"
             >
               <Image
                 src="/assets/logo.png"
                 alt="Shakya Consultants"
-                width={42}
-                height={42}
-                className="w-10.5 h-10.5 object-contain"
+                width={72}
+                height={72}
+                className="w-14 h-14 md:w-16 md:h-16 object-contain"
                 priority
               />
               <div className="text-2xl font-bold tracking-tighter shrink-0 flex items-center">
@@ -249,14 +249,14 @@ export default function Navbar() {
                   handleSmoothScroll(e, "#hero");
                   closeMobileMenu();
                 }}
-                className="flex items-center gap-4 focus:outline-none rounded-md"
+                className="flex items-center gap-3 focus:outline-none rounded-md"
               >
                 <Image
                   src="/assets/logo.png"
                   alt="Shakya Consultants"
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 object-contain"
+                  width={72}
+                  height={72}
+                  className="w-16 h-16 object-contain"
                 />
                 <div className="text-3xl font-bold tracking-tighter shrink-0 text-text-primary">
                   <span className="text-accent-primary">Shakya</span> <span className="text-text-primary">Consultants</span>

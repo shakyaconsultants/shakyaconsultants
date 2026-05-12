@@ -6,7 +6,6 @@ import Button from "@/components/ui/Button";
 import { useBookingModal } from "@/context/BookingModalContext";
 import React from "react";
 import Image from "next/image";
-import { Star } from "lucide-react";
 
 export default function Hero() {
   const { openBooking } = useBookingModal();
@@ -21,12 +20,6 @@ export default function Hero() {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
-
-  const avatars = [
-    "https://i.pravatar.cc/150?u=a",
-    "https://i.pravatar.cc/150?u=b",
-    "https://i.pravatar.cc/150?u=c",
-  ];
 
   return (
     <section
@@ -104,29 +97,6 @@ export default function Hero() {
                </a>
             </div>
 
-            {/* UPGRADED Trust Strip (Bottom Left) */}
-            <div className="reveal reveal-visible stagger-5 mt-10 pt-10 border-t border-black/[0.04] flex items-center gap-5">
-               <div className="flex -space-x-3">
-                  {avatars.map((url, i) => (
-                     <div key={i} className="relative w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden bg-slate-100">
-                        <img src={url} alt={`Avatar ${i}`} className="w-full h-full object-cover" />
-                     </div>
-                  ))}
-               </div>
-               <div className="flex flex-col text-left">
-                  <div className="flex items-center gap-1">
-                     <div className="flex gap-0.5">
-                        {[...Array(5)].map((_, i) => (
-                           <Star key={i} size={10} className="fill-yellow-400 text-yellow-400" />
-                        ))}
-                     </div>
-                     <span className="text-[11px] font-bold text-text-primary tracking-tight">Rated 5.0/5.0</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest">
-                     By <span className="text-text-primary">20+</span> High-Growth Teams
-                  </span>
-               </div>
-            </div>
           </div>
 
           {/* Right side: Floating glassmorphism booking card centered for balance */}
