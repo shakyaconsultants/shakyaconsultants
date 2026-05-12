@@ -6,11 +6,12 @@ const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env');
 }
+const MONGODB_URI_STRING: string = MONGODB_URI;
 
 let dnsConfigured = false;
 
 function configureMongoDns() {
-  if (dnsConfigured || !MONGODB_URI.startsWith('mongodb+srv://')) {
+  if (dnsConfigured || !MONGODB_URI_STRING.startsWith('mongodb+srv://')) {
     return;
   }
 
@@ -59,7 +60,7 @@ async function dbConnect() {
 
     configureMongoDns();
     console.log('Connecting to MongoDB...');
-    cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongooseInstance) => {
+    cached.promise = mongoose.connect(MONGODB_URI_STRING, opts).then((mongooseInstance) => {
       console.log('MongoDB Connected successfully');
       return mongooseInstance;
     }).catch((err) => {
