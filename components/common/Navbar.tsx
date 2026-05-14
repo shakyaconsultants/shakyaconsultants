@@ -134,31 +134,32 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 h-[72px] bg-white/85 backdrop-blur-[10px] border-b border-black/[0.05] shadow-[0_3px_14px_rgba(30,64,175,0.08)]"
+        className="fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 h-[68px] bg-white/85 backdrop-blur-[10px] border-b border-black/[0.05] shadow-[0_3px_14px_rgba(30,64,175,0.08)]"
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-full">
+        <div className="max-w-7xl mx-auto px-4 lg:px-6 h-full">
           <div className="flex items-center justify-between h-full">
             {/* Logo */}
             <Link
               href="/#hero"
               onClick={(e) => handleSmoothScroll(e, "#hero")}
-              className="flex items-center gap-3 md:gap-4 focus:outline-none rounded-md"
+              className="flex items-center gap-2 md:gap-2.5 focus:outline-none rounded-md shrink-0"
             >
               <Image
                 src="/assets/logo.png"
                 alt="Shakya Consultants"
-                width={72}
-                height={72}
-                className="w-14 h-14 md:w-16 md:h-16 object-contain"
+                width={52}
+                height={52}
+                className="w-10 h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 object-contain shrink-0"
                 priority
               />
-              <div className="text-2xl font-bold tracking-tighter shrink-0 flex items-center">
-                <span className="text-accent-primary mr-1">Shakya</span> <span className="text-text-primary">Consultants</span>
+              <div className="text-base md:text-lg lg:text-xl font-bold tracking-tighter flex items-center leading-none whitespace-nowrap">
+                <span className="text-accent-primary mr-1">Shakya</span>
+                <span className="text-text-primary">Consultants</span>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <div className="hidden lg:flex items-center space-x-3 xl:space-x-5">
               {navItems.map((item) => {
                 const isActive = activeSection === item.href || (activeSection === "" && item.href === "#work");
                 return (
@@ -166,7 +167,7 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={(e) => handleSmoothScroll(e, item.href)}
-                    className={`font-bold transition-all duration-300 focus:outline-none rounded-md px-2 py-1 relative group text-[11px] uppercase tracking-[0.2em] nav-link-lift hover:-translate-y-0.5 ${
+                    className={`font-bold transition-all duration-300 focus:outline-none rounded-md px-1.5 py-1 relative group text-[10px] xl:text-[11px] uppercase tracking-[0.16em] xl:tracking-[0.2em] whitespace-nowrap nav-link-lift hover:-translate-y-0.5 ${
                       isActive ? "text-accent-primary" : "text-slate-600 hover:text-accent-primary"
                     }`}
                   >
@@ -180,10 +181,10 @@ export default function Navbar() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-2 ml-2">
               <Link
                 href="/crm"
-                className="inline-flex items-center justify-center px-5 py-2.5 text-[10px] uppercase tracking-[0.2em] rounded-2xl border border-border-default text-text-primary font-bold transition-all duration-300 hover:border-accent-primary hover:text-accent-primary hover:scale-[1.03] active:scale-[0.95]"
+                className="inline-flex items-center justify-center px-3.5 py-2 text-[9px] xl:text-[10px] uppercase tracking-[0.16em] xl:tracking-[0.2em] whitespace-nowrap rounded-xl border border-border-default text-text-primary font-bold transition-all duration-300 hover:border-accent-primary hover:text-accent-primary hover:scale-[1.03] active:scale-[0.95]"
               >
                 Login to CRM
               </Link>
@@ -207,7 +208,7 @@ export default function Navbar() {
                 if (isMobileMenuOpen) closeMobileMenu();
                 else setIsMobileMenuOpen(true);
               }}
-              className="md:hidden p-2 relative z-10 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer touch-manipulation"
+              className="lg:hidden p-2 relative z-10 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer touch-manipulation"
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileMenuOpen ? "true" : "false"}
             >
@@ -232,7 +233,7 @@ export default function Navbar() {
       {(isMobileMenuOpen || isMenuClosing) && (
         <div
           ref={menuRef}
-          className={`md:hidden fixed top-0 left-0 w-full h-full z-[9999] flex flex-col overflow-hidden transition-transform duration-[250ms] ease-out isolate bg-[#F9FAFB] bg-[radial-gradient(circle_at_70%_30%,rgba(79,70,229,0.05),transparent_60%)] ${
+          className={`lg:hidden fixed top-0 left-0 w-full h-full z-[9999] flex flex-col overflow-hidden transition-transform duration-[250ms] ease-out isolate bg-[#F9FAFB] bg-[radial-gradient(circle_at_70%_30%,rgba(79,70,229,0.05),transparent_60%)] ${
             panelEntered && !isMenuClosing ? "translate-x-0" : "translate-x-full"
           }`}
           role="dialog"
