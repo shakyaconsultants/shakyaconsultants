@@ -25,7 +25,6 @@ const navItems: NavItem[] = [
   { label: "Contact Us", href: "/#contact" },
 ];
 
-
 export default function Navbar() {
   const { openBooking, openApplyModal } = useBookingModal();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -180,8 +179,14 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* CTA Button — opens Join Our Team modal */}
-            <div className="hidden md:block">
+            {/* CTA Buttons */}
+            <div className="hidden md:flex items-center gap-3">
+              <Link
+                href="/crm"
+                className="inline-flex items-center justify-center px-5 py-2.5 text-[10px] uppercase tracking-[0.2em] rounded-2xl border border-border-default text-text-primary font-bold transition-all duration-300 hover:border-accent-primary hover:text-accent-primary hover:scale-[1.03] active:scale-[0.95]"
+              >
+                Login to CRM
+              </Link>
               <Button
                 variant="primary"
                 size="sm"
@@ -275,16 +280,25 @@ export default function Navbar() {
             </div>
 
             <div className="apply-section shrink-0 px-4 sm:px-6 py-4 border-b border-gray-100">
-              <button
-                type="button"
-                onClick={() => {
-                  openApplyModal();
-                  closeMobileMenu();
-                }}
-                className="w-full min-h-[48px] py-4 rounded-button font-semibold text-base text-white cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-white active:opacity-90 touch-manipulation shadow-glow-primary bg-accent-primary"
-              >
-                Join Our Team
-              </button>
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href="/crm"
+                  onClick={() => closeMobileMenu()}
+                  className="w-full min-h-[48px] py-4 rounded-button font-semibold text-base text-text-primary border border-border-default bg-white text-center cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-white active:opacity-90 touch-manipulation"
+                >
+                  Login to CRM
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    openApplyModal();
+                    closeMobileMenu();
+                  }}
+                  className="w-full min-h-[48px] py-4 rounded-button font-semibold text-base text-white cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-white active:opacity-90 touch-manipulation shadow-glow-primary bg-accent-primary"
+                >
+                  Join Our Team
+                </button>
+              </div>
             </div>
 
             <div className="nav-links flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-4">

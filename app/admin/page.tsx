@@ -562,6 +562,7 @@ export default function AdminDashboard() {
                   </Button>
                 </form>
               )}
+
             </Card>
           </div>
 
@@ -667,6 +668,7 @@ export default function AdminDashboard() {
                   <p className="col-span-2 text-center py-10 text-text-secondary">No testimonials found.</p>
                 )
               )}
+
             </div>
           </div>
         </div>

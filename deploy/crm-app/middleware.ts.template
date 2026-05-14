@@ -1,0 +1,20 @@
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+// Add this to the CRM project repository (not main site repo).
+// Redirect direct *.vercel.app hits to main-domain /crm path.
+export function middleware(req: NextRequest) {
+  const host = req.headers.get("host") || "";
+  if (host.endsWith(".vercel.app")) {
+    const url = req.nextUrl.clone();
+    url.protocol = "https:";
+    url.host = "shakyaconsultants.com";
+    url.pathname = `/crm${url.pathname}`;
+    return NextResponse.redirect(url, 308);
+  }
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/((?!_next|favicon.ico).*)"],
+};
