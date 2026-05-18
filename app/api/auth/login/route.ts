@@ -10,7 +10,6 @@ const TOKEN_EXPIRY = '7d';
 
 export async function POST(req: Request) {
   try {
-    await dbConnect();
     const { email, password } = await req.json();
     const normalizedEmail = String(email || '').toLowerCase().trim();
 
@@ -22,24 +21,31 @@ export async function POST(req: Request) {
       }, { status: 400 });
     }
 
-    // 2. Try DB admin first (must use .select('+password') since it's hidden by default)
-    const admin = await Admin.findOne({ email: normalizedEmail }).select('+password');
-
     let authenticatedEmail: string | null = null;
     let authenticatedId: string | null = null;
 
-    if (admin) {
-      const isMatch = await admin.matchPassword(password);
-      if (isMatch) {
-        authenticatedEmail = admin.email;
-        authenticatedId = String(admin._id);
+    // 2. Try DB admin first, but don't fail hard if DB is unavailable.
+    try {
+      await dbConnect();
+      const admin = await Admin.findOne({ email: normalizedEmail }).select('+password');
+
+      if (admin) {
+        const isMatch = await admin.matchPassword(password);
+        if (isMatch) {
+          authenticatedEmail = admin.email;
+          authenticatedId = String(admin._id);
+        }
       }
-    } else if (
+    } catch (dbError) {
+      console.error('Login DB lookup failed, attempting env fallback:', dbError);
+    }
+
+    if (!authenticatedEmail && !authenticatedId && (
       ADMIN_EMAIL &&
       ADMIN_PASSWORD &&
       normalizedEmail === ADMIN_EMAIL.toLowerCase().trim() &&
       password === ADMIN_PASSWORD
-    ) {
+    )) {
       // Fallback for projects where admin seed has not been run yet.
       authenticatedEmail = ADMIN_EMAIL.toLowerCase().trim();
       authenticatedId = `env-admin-${authenticatedEmail}`;

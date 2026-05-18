@@ -27,6 +27,9 @@ const navItems: NavItem[] = [
 
 export default function Navbar() {
   const { openBooking, openApplyModal } = useBookingModal();
+  const [crmLoginUrl, setCrmLoginUrl] = useState(
+    "https://crm-eight-lac.vercel.app"
+  );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMenuClosing, setIsMenuClosing] = useState(false);
   const [panelEntered, setPanelEntered] = useState(false);
@@ -52,6 +55,22 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const fetchCrmLoginUrl = async () => {
+      try {
+        const res = await fetch("/api/settings");
+        const data = await res.json();
+        if (data?.success && data?.data?.crmLoginUrl) {
+          setCrmLoginUrl(data.data.crmLoginUrl);
+        }
+      } catch (err) {
+        console.error("Failed to fetch CRM login URL");
+      }
+    };
+
+    fetchCrmLoginUrl();
   }, []);
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -182,12 +201,12 @@ export default function Navbar() {
 
             {/* CTA Buttons */}
             <div className="hidden lg:flex items-center gap-2 ml-2">
-              <Link
-                href="/crm"
+              <a
+                href={crmLoginUrl}
                 className="inline-flex items-center justify-center px-3.5 py-2 text-[9px] xl:text-[10px] uppercase tracking-[0.16em] xl:tracking-[0.2em] whitespace-nowrap rounded-xl border border-border-default text-text-primary font-bold transition-all duration-300 hover:border-accent-primary hover:text-accent-primary hover:scale-[1.03] active:scale-[0.95]"
               >
                 Login to CRM
-              </Link>
+              </a>
               <Button
                 variant="primary"
                 size="sm"
@@ -283,7 +302,7 @@ export default function Navbar() {
             <div className="apply-section shrink-0 px-4 sm:px-6 py-4 border-b border-gray-100">
               <div className="grid grid-cols-2 gap-3">
                 <a
-                  href="/crm"
+                  href={crmLoginUrl}
                   onClick={() => closeMobileMenu()}
                   className="w-full min-h-[48px] py-4 rounded-button font-semibold text-base text-text-primary border border-border-default bg-white text-center cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-white active:opacity-90 touch-manipulation"
                 >

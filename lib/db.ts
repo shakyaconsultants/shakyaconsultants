@@ -19,12 +19,15 @@ function configureMongoDns() {
     .split(',')
     .map((server) => server.trim())
     .filter(Boolean);
-
-  const fallbackServers = ['1.1.1.1', '8.8.8.8'];
-  const dnsServers = envServers.length > 0 ? envServers : fallbackServers;
+  if (envServers.length === 0) {
+    // Use OS DNS resolver by default. Some networks block direct public DNS and
+    // can trigger `querySrv ECONNREFUSED` when forcing 1.1.1.1/8.8.8.8.
+    dnsConfigured = true;
+    return;
+  }
 
   try {
-    dns.setServers(dnsServers);
+    dns.setServers(envServers);
     dnsConfigured = true;
   } catch (error) {
     console.warn('Failed to set custom DNS servers for MongoDB SRV lookup:', error);

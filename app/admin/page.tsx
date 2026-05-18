@@ -8,7 +8,7 @@ import Card from '@/components/ui/Card';
 export default function AdminDashboard() {
   const router = useRouter();
   const [authChecking, setAuthChecking] = useState(true);
-  const [activeTab, setActiveTab] = useState<'projects' | 'clients' | 'testimonials'>('projects');
+  const [activeTab, setActiveTab] = useState<'projects' | 'clients' | 'testimonials' | 'settings'>('projects');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +41,9 @@ export default function AdminDashboard() {
     rating: 5,
     image: null as File | null,
   });
+  const [settingsForm, setSettingsForm] = useState({
+    crmLoginUrl: 'https://crm-eight-lac.vercel.app',
+  });
 
   // Helper to get token
   const getAuthToken = () => localStorage.getItem('adminToken');
@@ -71,6 +74,7 @@ export default function AdminDashboard() {
           fetchProjects(),
           fetchClients(),
           fetchTestimonials(),
+          fetchCrmLoginSetting(),
         ]);
       } finally {
         setAuthChecking(false);
@@ -125,6 +129,18 @@ export default function AdminDashboard() {
       if (data.success) setTestimonials(data.data);
     } catch (err) {
       console.error('Failed to fetch testimonials');
+    }
+  };
+
+  const fetchCrmLoginSetting = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (data.success && data.data?.crmLoginUrl) {
+        setSettingsForm({ crmLoginUrl: data.data.crmLoginUrl });
+      }
+    } catch (err) {
+      console.error('Failed to fetch CRM login setting');
     }
   };
 
@@ -344,6 +360,42 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSettingsSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    const token = getAuthToken();
+    if (!token) return router.push('/admin/login');
+
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          crmLoginUrl: settingsForm.crmLoginUrl.trim(),
+        }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setSuccess('CRM login URL updated successfully!');
+        setSettingsForm({ crmLoginUrl: data.data.crmLoginUrl });
+      } else {
+        setError(data.error || 'Failed to update CRM login URL');
+        if (res.status === 401) handleLogout();
+      }
+    } catch (err) {
+      setError('Settings update failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-bg-base p-8">
       <div className="max-w-6xl mx-auto">
@@ -377,6 +429,12 @@ export default function AdminDashboard() {
           >
             Testimonials
           </Button>
+          <Button
+            variant={activeTab === 'settings' ? 'primary' : 'secondary'}
+            onClick={() => setActiveTab('settings')}
+          >
+            Settings
+          </Button>
         </div>
 
         {/* Feedback Messages */}
@@ -390,7 +448,13 @@ export default function AdminDashboard() {
           <div className="lg:col-span-1">
             <Card className="p-6">
               <h2 className="text-xl font-bold mb-6">
-                {activeTab === 'projects' ? 'Add New Project' : activeTab === 'clients' ? 'Add New Client' : 'Add New Testimonial'}
+                {activeTab === 'projects'
+                  ? 'Add New Project'
+                  : activeTab === 'clients'
+                    ? 'Add New Client'
+                    : activeTab === 'testimonials'
+                      ? 'Add New Testimonial'
+                      : 'CRM Login URL'}
               </h2>
               
               {activeTab === 'projects' && (
@@ -559,6 +623,29 @@ export default function AdminDashboard() {
                   </div>
                   <Button className="w-full" disabled={loading}>
                     {loading ? 'Uploading...' : 'Add Testimonial'}
+                  </Button>
+                </form>
+              )}
+
+              {activeTab === 'settings' && (
+                <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="crm-login-url" className="block text-sm font-medium mb-1">CRM Login URL</label>
+                    <input
+                      id="crm-login-url"
+                      type="url"
+                      placeholder="https://crm-eight-lac.vercel.app"
+                      className="w-full p-2 border border-border-default rounded"
+                      value={settingsForm.crmLoginUrl}
+                      onChange={(e) => setSettingsForm({ crmLoginUrl: e.target.value })}
+                      required
+                    />
+                    <p className="text-xs text-text-secondary mt-2">
+                      This controls the navbar &quot;Login to CRM&quot; button link.
+                    </p>
+                  </div>
+                  <Button className="w-full" disabled={loading}>
+                    {loading ? 'Saving...' : 'Save CRM Link'}
                   </Button>
                 </form>
               )}
