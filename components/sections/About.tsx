@@ -56,7 +56,7 @@ export default function About({ className = "" }: { className?: string }) {
 
               <p className="text-lg md:text-xl text-text-muted/70 leading-relaxed">
                 Every solution we deliver is crafted with deep technical expertise and a strong understanding 
-                of modern digital ecosystems — ensuring your business stays ahead in a competitive landscape.
+                of digital ecosystems — ensuring your business stays ahead in a competitive landscape.
               </p>
 
                 <Link
