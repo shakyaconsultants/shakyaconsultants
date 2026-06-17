@@ -2,65 +2,67 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import Admin from '@/models/Admin';
 import jwt from 'jsonwebtoken';
+import { ensureAdminFromEnv, matchesEnvAdminCredentials } from '@/lib/ensureAdmin';
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const TOKEN_EXPIRY = '7d';
 
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
     const normalizedEmail = String(email || '').toLowerCase().trim();
+    const normalizedPassword = String(password || '');
 
-    // 1. Missing fields check
-    if (!normalizedEmail || !password) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Email and password are required' 
+    if (!normalizedEmail || !normalizedPassword) {
+      return NextResponse.json({
+        success: false,
+        error: 'Email and password are required',
       }, { status: 400 });
     }
 
     let authenticatedEmail: string | null = null;
     let authenticatedId: string | null = null;
 
-    // 2. Try DB admin first, but don't fail hard if DB is unavailable.
+    // 1. Authenticate against MongoDB admin record.
     try {
       await dbConnect();
       const admin = await Admin.findOne({ email: normalizedEmail }).select('+password');
 
       if (admin) {
-        const isMatch = await admin.matchPassword(password);
+        const isMatch = await admin.matchPassword(normalizedPassword);
         if (isMatch) {
           authenticatedEmail = admin.email;
           authenticatedId = String(admin._id);
         }
       }
     } catch (dbError) {
-      console.error('Login DB lookup failed, attempting env fallback:', dbError);
+      console.error('Login DB lookup failed:', dbError);
     }
 
-    if (!authenticatedEmail && !authenticatedId && (
-      ADMIN_EMAIL &&
-      ADMIN_PASSWORD &&
-      normalizedEmail === ADMIN_EMAIL.toLowerCase().trim() &&
-      password === ADMIN_PASSWORD
-    )) {
-      // Fallback for projects where admin seed has not been run yet.
-      authenticatedEmail = ADMIN_EMAIL.toLowerCase().trim();
-      authenticatedId = `env-admin-${authenticatedEmail}`;
+    // 2. Env fallback — also syncs credentials into MongoDB when they match.
+    if (!authenticatedEmail && matchesEnvAdminCredentials(normalizedEmail, normalizedPassword)) {
+      try {
+        const admin = await ensureAdminFromEnv();
+        authenticatedEmail = admin.email;
+        authenticatedId = String(admin._id);
+      } catch (syncError) {
+        console.error('Env admin sync failed:', syncError);
+        return NextResponse.json({
+          success: false,
+          error: 'Invalid credentials',
+        }, { status: 401 });
+      }
     }
 
     if (!authenticatedEmail || !authenticatedId) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Invalid credentials' 
+      return NextResponse.json({
+        success: false,
+        error: 'Invalid credentials',
       }, { status: 401 });
     }
 
-    // 4. Generate JWT
     if (!JWT_SECRET) {
-        throw new Error('JWT_SECRET is missing in environment variables');
+      throw new Error('JWT_SECRET is missing in environment variables');
     }
 
     const token = jwt.sign(
@@ -69,18 +71,16 @@ export async function POST(req: Request) {
       { expiresIn: TOKEN_EXPIRY }
     );
 
-    // 5. Return success and token
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       token,
-      message: 'Logged in successfully'
+      message: 'Logged in successfully',
     }, { status: 200 });
-
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Login API Error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Server error during login' 
+    return NextResponse.json({
+      success: false,
+      error: 'Server error during login',
     }, { status: 500 });
   }
 }
