@@ -28,7 +28,7 @@ const navItems: NavItem[] = [
 export default function Navbar() {
   const { openBooking, openApplyModal } = useBookingModal();
   const [crmLoginUrl, setCrmLoginUrl] = useState(
-    "https://crm-eight-lac.vercel.app"
+    "https://hr-portal-gdf.vercel.app/"
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMenuClosing, setIsMenuClosing] = useState(false);
@@ -205,7 +205,7 @@ export default function Navbar() {
                 href={crmLoginUrl}
                 className="inline-flex items-center justify-center px-3.5 py-2 text-[9px] xl:text-[10px] uppercase tracking-[0.16em] xl:tracking-[0.2em] whitespace-nowrap rounded-xl border border-border-default text-text-primary font-bold transition-all duration-300 hover:border-accent-primary hover:text-accent-primary hover:scale-[1.03] active:scale-[0.95]"
               >
-                Login to CRM
+                Login to HR-Portal
               </a>
               <Button
                 variant="primary"
